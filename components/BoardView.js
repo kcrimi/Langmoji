@@ -4,7 +4,8 @@ import React, {
   Component,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity,
 } from 'react-native';
 var {width, height} = require('Dimensions').get('window');
 const GRID_SIZE = 4;
@@ -34,14 +35,23 @@ class BoardView extends Component {
 					left: col * CELL_SIZE + CELL_PADDING,
 					top: row * CELL_SIZE + CELL_PADDING,
 				};
-				result.push(
-					<View key={ key } style= {[styles.tile, position]}>
-						<Text style={styles.letter}>{ letter }</Text>
-					</View>
-				);
+				result.push(this.renderTile(key, position, letter));
 			}
 		}
 		return result;
+	}
+
+	renderTile(id, position, letter){
+		return (
+			<View key={id} style={ [styles.tile, position] }
+				onStartShouldSetResponder={() => this.clickTile(id)}>
+				<Text style={ styles.letter }> { letter } </Text>
+			</View>
+		);
+	}
+
+	clickTile(id) {
+		console.log(id);
 	}
 }
 
