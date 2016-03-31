@@ -12,7 +12,7 @@ const CELL_SIZE = Math.floor(width * .2);
 const CELL_PADDING = Math.floor(CELL_SIZE * .05);
 const BORDER_RADIUS = CELL_PADDING * 2;
 const TILE_SIZE = CELL_SIZE - CELL_PADDING * 2;
-const LETTER_SIZE = Math.floor(TILE_SIZE * .75);
+const LETTER_SIZE = Math.floor(TILE_SIZE * .85);
 
 class BoardView extends Component {
 
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
 	},
 	tile: {
 		position: 'absolute',
+		paddingTop: CELL_PADDING * 2,
 		width: TILE_SIZE,
 		height: TILE_SIZE,
 		borderRadius: BORDER_RADIUS,
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#BEE1D2'
 	},
 	letter: {
+		fontFamily: 'Serto Urhoy',
 		color: '#333',
 		fontSize: LETTER_SIZE,
 		backgroundColor: 'transparent',
