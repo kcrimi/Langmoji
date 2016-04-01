@@ -6,11 +6,13 @@
 import React, {
   Component,
   StyleSheet,
-  View
+  View,
+  Text
 } from 'react-native';
 import Firebase from 'firebase';
 import BoardView from './components/BoardView.js';
 import ActionButton from './components/ActionButton.js';
+import ClueText from './components/ClueText.js';
 const WAVE_SIZE = 16;
 
 class Langmoji extends Component {
@@ -20,15 +22,22 @@ class Langmoji extends Component {
     this.dataRef = new Firebase("<https://langmoji.firebaseio.com/lessons/basic");
     this.state = {
       dataSource: [],
+      activeData: [],
       score: 0,
+      currentItem: null,
+
     }
   }
 
   render() {
     return (
       <View style={ styles.container }>
+        <View style={ styles.score }>
+          <Text style= { styles.scoreText }>Score: { this.state.score }</Text>
+        </View>
         <BoardView 
-          activeIcons={ this.state.dataSource }/>
+          activeIcons={ this.state.activeData }/>
+        <ClueText selectItem={ this.state.activeData[this.state.currentItem] }/>
       </View>
     );
   }
@@ -48,8 +57,11 @@ class Langmoji extends Component {
           _key: child.key(),
         })
       });
+      data = this.shuffleData(data)
       this.setState({
-        dataSource: this.shuffleData(data),
+        dataSource: data,
+        activeData: data.slice(0, WAVE_SIZE + 1),
+        currentItem: this.selectCurrentItem(),
       })
     });
   }
@@ -67,6 +79,10 @@ class Langmoji extends Component {
     } 
     return dataArray; 
   }
+
+  selectCurrentItem() {
+    return Math.floor(Math.random() * (WAVE_SIZE + 1));
+  }
 }
 
 const styles = StyleSheet.create({
@@ -74,8 +90,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#644B62',
+    backgroundColor: '#0066cc',
   },
+  score: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scoreText: {
+    fontSize: 50,
+    color: '#ffad33',
+  }
 });
 
 module.exports = Langmoji;
