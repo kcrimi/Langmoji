@@ -86,7 +86,7 @@ class BoardView extends Component {
 	}
 }
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
 	container: {
 		width: CELL_SIZE * GRID_SIZE,
 		height: CELL_SIZE * GRID_SIZE,

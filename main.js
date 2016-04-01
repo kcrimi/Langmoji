@@ -11,21 +11,24 @@ import React, {
 import Firebase from 'firebase';
 import BoardView from './components/BoardView.js';
 import ActionButton from './components/ActionButton.js';
+const WAVE_SIZE = 16;
 
-class AlphaGame extends Component {
+class Langmoji extends Component {
 
   constructor(props) {
     super(props);
     this.dataRef = new Firebase("<https://langmoji.firebaseio.com/lessons/basic");
     this.state = {
       dataSource: [],
+      score: 0,
     }
   }
 
   render() {
     return (
       <View style={ styles.container }>
-        <BoardView activeIcons={ this.state.dataSource }/>
+        <BoardView 
+          activeIcons={ this.state.dataSource }/>
       </View>
     );
   }
@@ -46,9 +49,23 @@ class AlphaGame extends Component {
         })
       });
       this.setState({
-        dataSource: data,
+        dataSource: this.shuffleData(data),
       })
     });
+  }
+
+  shuffleData(dataArray) {
+    var i = 0;
+    var j = 0;
+    var temp = null;
+
+    for (i = dataArray.length -1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      temp = dataArray[i]
+      dataArray[i] = dataArray[j];
+      dataArray[j] = temp;
+    } 
+    return dataArray; 
   }
 }
 
@@ -61,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = AlphaGame;
+module.exports = Langmoji;
