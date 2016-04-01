@@ -1,3 +1,3 @@
 import React, { AppRegistry } from 'react-native';
 
-AppRegistry.registerComponent('AlphaGame', () => require('./main.js'));
+AppRegistry.registerComponent('Langmoji', () => require('./main.js'));

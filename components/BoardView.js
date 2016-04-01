@@ -16,7 +16,7 @@ const CELL_SIZE = Math.floor(width * .2);
 const CELL_PADDING = Math.floor(CELL_SIZE * .05);
 const BORDER_RADIUS = CELL_PADDING * 2;
 const TILE_SIZE = CELL_SIZE - CELL_PADDING * 2;
-const LETTER_SIZE = Math.floor(TILE_SIZE * .85);
+const LETTER_SIZE = Math.floor(TILE_SIZE * .65);
 
 class BoardView extends Component {
 
@@ -26,7 +26,9 @@ class BoardView extends Component {
 		for (var i = 0; i < tilts.length; i++){
 			tilts[i] = new Animated.Value(0);
 		}
-		this.state = {tilt: tilts};
+		this.state = {
+			tilt: tilts
+		};
 	}
 
 	render() {
@@ -42,7 +44,12 @@ class BoardView extends Component {
 		for (var row = 0; row < GRID_SIZE; row++) {
 			for (var col = 0; col < GRID_SIZE; col++) {
 				var id = row * GRID_SIZE + col;
-				var letter = String.fromCharCode(65 + id);
+				var letter = "";
+				if (this.props.activeIcons.length > 0) {
+					var data = this.props.activeIcons[id];
+					console.log(data.emoji);
+					letter = data.emoji;
+				}
 				var tilt = this.state.tilt[id].interpolate({
 					inputRange: [0, 1],
 					outputRange: ['0deg', '-360deg'],
@@ -87,7 +94,6 @@ const styles = StyleSheet.create({
 	},
 	tile: {
 		position: 'absolute',
-		paddingTop: CELL_PADDING * 2,
 		width: TILE_SIZE,
 		height: TILE_SIZE,
 		borderRadius: BORDER_RADIUS,
@@ -96,7 +102,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#BEE1D2'
 	},
 	letter: {
-		fontFamily: 'Serto Urhoy',
 		color: '#333',
 		fontSize: LETTER_SIZE,
 		backgroundColor: 'transparent',
