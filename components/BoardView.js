@@ -22,11 +22,11 @@ class BoardView extends Component {
 
 	constructor(props) {
 		super(props);
-		var opacities = new Array(GRID_SIZE * GRID_SIZE);
-		for (var i = 0; i < opacities.length; i++){
-			opacities[i] = new Animated.Value(1);
+		var tilts = new Array(GRID_SIZE * GRID_SIZE);
+		for (var i = 0; i < tilts.length; i++){
+			tilts[i] = new Animated.Value(0);
 		}
-		this.state = {opacities: opacities};
+		this.state = {tilt: tilts};
 	}
 
 	render() {
@@ -43,10 +43,15 @@ class BoardView extends Component {
 			for (var col = 0; col < GRID_SIZE; col++) {
 				var id = row * GRID_SIZE + col;
 				var letter = String.fromCharCode(65 + id);
+				var tilt = this.state.tilt[id].interpolate({
+					inputRange: [0, 1],
+					outputRange: ['0deg', '-360deg'],
+				});
 				var style = {
 					left: col * CELL_SIZE + CELL_PADDING,
 					top: row * CELL_SIZE + CELL_PADDING,
-					opacity: this.state.opacities[id],
+					transform: [{perspective: CELL_SIZE * 8},
+					{rotateX: tilt}],
 				};
 				result.push(this.renderTile(id, style, letter));
 			}
@@ -64,11 +69,12 @@ class BoardView extends Component {
 	}
 
 	clickTile(id) {
-		var opacity = this.state.opacities[id];
-		opacity.setValue(.5);
-		Animated.timing(opacity, {
-			toValue: 1,
+		var tilt = this.state.tilt[id];
+		tilt.setValue(1);
+		Animated.timing(tilt, {
+			toValue: 0,
 			duration: 250,
+			easing: Easing.quad
 		}).start();
 	}
 }
