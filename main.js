@@ -18,7 +18,7 @@ class Langmoji extends Component {
 
   constructor(props) {
     super(props);
-    this.dataRef = new Firebase("<https://langmoji.firebaseio.com/lessons/basic");
+    this.dataRef = new Firebase("<https://langmoji.firebaseio.com/lessons/0");
     this.state = {
       dataSource: [],
       activeData: [],
@@ -117,16 +117,31 @@ class Langmoji extends Component {
   }
 
   selectCurrentItem() {
-    return Math.floor(Math.random() * WAVE_SIZE);
+    var choice = Math.floor(Math.random() * WAVE_SIZE);
+    while (this.state.activeData.length != 0
+      && this.state.activeData[choice].hasOwnProperty('completed')) {
+      choice = Math.floor(Math.random() * WAVE_SIZE);
+    }
+    return choice;
   }
 
   checkTileClick(id) {
     if (id == this.state.currentItem) {
-      this.state.activeData[id] = this.state.dataSource[WAVE_SIZE+this.state.score];
+      if (WAVE_SIZE+this.state.score < this.state.dataSource.length){
+        this.state.activeData[id] = this.state.dataSource[WAVE_SIZE+this.state.score];
+      } else {
+        this.state.activeData[id] = {emoji: "", description: "LEVEL COMPLETE!", completed: true};
+      }
       this.state.score++;
-      this.setState({
-        currentItem: this.selectCurrentItem(),
-      })
+      if (this.state.score == this.state.dataSource.length){
+        this.setState({
+          currentItem: this.state.currentItem,
+        })
+      } else {
+        this.setState({
+          currentItem: this.selectCurrentItem(),
+        })
+      }
       console.log("CORRECT!");
     } else {
       console.log("wrong tile");
