@@ -95,7 +95,7 @@ class Langmoji extends Component {
   }
 
   selectCurrentItem() {
-    return Math.floor(Math.random() * (WAVE_SIZE + 1));
+    return Math.floor(Math.random() * WAVE_SIZE);
   }
 
   checkTileClick(id) {
