@@ -24,12 +24,15 @@ class ClueText extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 10,
   },
   clueText : {
   	fontSize: 30,
   	color: '#FFFFFF',
+    textAlign: 'center',
   }
 });
 
