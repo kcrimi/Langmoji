@@ -7,7 +7,7 @@ import React, {
   Component,
   StyleSheet,
   View,
-  Text
+  Text,
 } from 'react-native';
 import Firebase from 'firebase';
 import BoardView from './components/BoardView.js';
@@ -36,7 +36,8 @@ class Langmoji extends Component {
           <Text style= { styles.scoreText }>Score: { this.state.score }</Text>
         </View>
         <BoardView 
-          activeIcons={ this.state.activeData }/>
+          activeIcons={ this.state.activeData}
+          tileClickCallback={this.checkTileClick.bind(this)}/>
         <ClueText selectItem={ this.state.activeData[this.state.currentItem] }/>
       </View>
     );
@@ -50,12 +51,18 @@ class Langmoji extends Component {
     dataRef.on('value', (snap) => {
       var data = [];
       snap.forEach((child) => {
-        data.push({ 
-          emoji:child.val().emoji, 
-          description: child.val().description,
-          tags: child.val().tags,
-          _key: child.key(),
-        })
+        if (child.val().hasOwnProperty('emoji') && child.val().hasOwnProperty('description')) {
+          data.push({ 
+            emoji:child.val().emoji, 
+            description: child.val().description,
+            tags: child.val().tags,
+            _key: child.key(),
+          })
+        } else {
+          // Data cleanse missing data
+          this.dataRef.child(child.key()).remove();
+        }
+        
       });
       data = this.shuffleData(data)
       this.setState({
@@ -82,6 +89,19 @@ class Langmoji extends Component {
 
   selectCurrentItem() {
     return Math.floor(Math.random() * (WAVE_SIZE + 1));
+  }
+
+  checkTileClick(id) {
+    if (id == this.state.currentItem) {
+      this.state.activeData[id] = this.state.dataSource[WAVE_SIZE+this.state.score];
+      this.state.score++;
+      this.setState({
+        currentItem: this.selectCurrentItem(),
+      })
+      console.log("CORRECT!");
+    } else {
+      console.log("wrong tile");
+    }
   }
 }
 

@@ -47,7 +47,6 @@ class BoardView extends Component {
 				var letter = "";
 				if (this.props.activeIcons.length > 0) {
 					var data = this.props.activeIcons[id];
-					console.log(data.emoji);
 					letter = data.emoji;
 				}
 				var tilt = this.state.tilt[id].interpolate({
@@ -83,6 +82,7 @@ class BoardView extends Component {
 			duration: 250,
 			easing: Easing.quad
 		}).start();
+		this.props.tileClickCallback(id);
 	}
 }
 
