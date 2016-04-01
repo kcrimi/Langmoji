@@ -14,7 +14,6 @@ import BoardView from './components/BoardView.js';
 import ActionButton from './components/ActionButton.js';
 import ClueText from './components/ClueText.js';
 const WAVE_SIZE = 16;
-
 class Langmoji extends Component {
 
   constructor(props) {
@@ -48,6 +47,29 @@ class Langmoji extends Component {
         <ClueText selectItem={ this.state.activeData[this.state.currentItem] }/>
       </View>
     );
+  }
+
+  loadData() {
+    console.log("loading data");
+    const EMOJI_DATA = require('./assets/emoji-pack.json');
+    var lesson = -1;
+    var item = 0;
+    for (element in EMOJI_DATA) {
+      if (EMOJI_DATA[element].hasOwnProperty('emoji') 
+        && EMOJI_DATA[element].hasOwnProperty('description')) {
+        if (item % 30 == 0) {
+          lesson++;
+          console.log("lesson "+lesson);
+          var firepush = new Firebase("<https://langmoji.firebaseio.com/lessons/"+lesson);
+        }
+        firepush.push({
+          emoji: EMOJI_DATA[element].emoji,
+          description: EMOJI_DATA[element].description,
+          tags: EMOJI_DATA[element].tags,
+        })
+      item++;
+      }
+    }
   }
 
   componentDidMount() {
