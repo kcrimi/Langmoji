@@ -25,11 +25,18 @@ class Langmoji extends Component {
       activeData: [],
       score: 0,
       currentItem: null,
-
     }
   }
 
   render() {
+    if (false) {
+      var selectedItem = {emoji:'K', description: "This is a test item"};
+      return (
+        <View style={ styles.container }>
+        </View>
+        );
+    } 
+
     return (
       <View style={ styles.container }>
         <View style={ styles.score }>
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
   scoreText: {
     fontSize: 50,
     color: '#ffad33',
-  }
+  },
 });
 
 module.exports = Langmoji;
